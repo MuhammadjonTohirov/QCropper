@@ -6,29 +6,29 @@
 
 import UIKit
 
-class TopBar: UIView {
-    lazy var flipButton: UIButton = {
+public class TopBar: UIView {
+    public lazy var flipButton: UIButton = {
         let button = self.iconButton(iconName: "QCropper.flip.horizontal.fill")
         button.left = 0
         button.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin]
         return button
     }()
 
-    lazy var rotateButton: UIButton = {
+    public lazy var rotateButton: UIButton = {
         let button = self.iconButton(iconName: "QCropper.rotate.right.fill")
         button.left = self.flipButton.right
         button.autoresizingMask = [.flexibleTopMargin, .flexibleRightMargin]
         return button
     }()
 
-    lazy var aspectRationButton: UIButton = {
+    public lazy var aspectRationButton: UIButton = {
         let button = self.iconButton(iconName: "QCropper.aspectratio.fill")
         button.right = self.width
         button.autoresizingMask = [.flexibleTopMargin, .flexibleLeftMargin]
         return button
     }()
 
-    lazy var blurBackgroundView: UIVisualEffectView = {
+    public lazy var blurBackgroundView: UIVisualEffectView = {
         let vev = UIVisualEffectView(effect: UIBlurEffect(style: .dark))
         vev.alpha = 0.3
         vev.backgroundColor = .clear
@@ -38,7 +38,7 @@ class TopBar: UIView {
         return vev
     }()
 
-    override init(frame: CGRect) {
+    public override init(frame: CGRect) {
         super.init(frame: frame)
 
         addSubview(blurBackgroundView)
@@ -47,11 +47,11 @@ class TopBar: UIView {
         addSubview(aspectRationButton)
     }
 
-    required init?(coder _: NSCoder) {
+    public required init?(coder _: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func iconButton(iconName: String) -> UIButton {
+    public func iconButton(iconName: String) -> UIButton {
         let button = IconButton(iconName)
         button.bottom = height
         return button
