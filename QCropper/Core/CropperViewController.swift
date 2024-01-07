@@ -71,6 +71,7 @@ open class CropperViewController: UIViewController, Rotatable, StateRestorable, 
     var maxCropRegion: CGRect = .zero
     var defaultCropBoxCenter: CGPoint = .zero
     var defaultCropBoxSize: CGSize = .zero
+    var imageCropBoxSize: CGSize = .zero
 
     var straightenAngle: CGFloat = 0.0
     var rotationAngle: CGFloat = 0.0
@@ -127,7 +128,9 @@ open class CropperViewController: UIViewController, Rotatable, StateRestorable, 
         return iv
     }()
 
-    lazy var cropBoxPanGesture: UIPanGestureRecognizer = {
+    lazy
+    open
+    var cropBoxPanGesture: UIPanGestureRecognizer = {
         let pan = UIPanGestureRecognizer(target: self, action: #selector(cropBoxPan(_:)))
         pan.delegate = self
         return pan
@@ -372,6 +375,7 @@ open class CropperViewController: UIViewController, Rotatable, StateRestorable, 
     }
 
     @objc
+    open
     func rotateButtonPressed(_: UIButton) {
         rotate90degrees()
     }
@@ -425,7 +429,10 @@ open class CropperViewController: UIViewController, Rotatable, StateRestorable, 
             let scaleH = self.originalImage.size.height / self.maxCropRegion.size.height
             let scale = max(scaleW, scaleH)
             size = CGSize(width: self.originalImage.size.width / scale, height: self.originalImage.size.height / scale)
-            return size
+            self.imageCropBoxSize = size
+            let minSize = min(size.width, size.height)
+            
+            return .init(width: minSize, height: minSize)
         }()
 
         backgroundView.frame = view.bounds
@@ -440,7 +447,8 @@ open class CropperViewController: UIViewController, Rotatable, StateRestorable, 
         scrollView.contentOffset = .zero
         scrollView.center = backgroundView.convert(defaultCropBoxCenter, to: scrollViewContainer)
         imageView.transform = .identity
-        imageView.frame = scrollView.bounds
+        imageView.frame = .init(x: 0, y: 0, width: imageCropBoxSize.width, height: imageCropBoxSize.height)
+        imageView.contentMode = .scaleAspectFill
         imageView.image = originalImage
         overlay.frame = backgroundView.bounds
         overlay.cropBoxFrame = CGRect(center: defaultCropBoxCenter, size: defaultCropBoxSize)
